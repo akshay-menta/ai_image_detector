@@ -38,7 +38,8 @@ Install the dependencies and start the Streamlit server.
 pip install Pillow python_dotenv streamlit
 streamlit run app.py
 ```
-<img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/45fb3538-6ee8-4e6a-a025-9acd3e0f7477" />
+<img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/fdbcf25d-68f8-4b2b-bc63-cef00df5af42" />
+
 
 ## Command Line Usage
 
