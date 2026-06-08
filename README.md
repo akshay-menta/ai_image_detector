@@ -49,6 +49,9 @@ python main.py photo.jpg
 
 To see more information or get a full JSON output, append the verbose or json flags to your command.
 
+<img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/45fb3538-6ee8-4e6a-a025-9acd3e0f7477" />
+
+
 ## Extending
 
 Every result includes a `next_stage_input` field. This is a prepackaged payload ready to pass to any external API. For example, you could pass it to a vision model or a cloud classifier as a future Stage 2. To wire in a future API, import your module, pass the payload to it, blend the scores, and rerun the verdict logic.
