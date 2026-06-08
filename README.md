@@ -38,6 +38,7 @@ Install the dependencies and start the Streamlit server.
 pip install Pillow python_dotenv streamlit
 streamlit run app.py
 ```
+<img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/45fb3538-6ee8-4e6a-a025-9acd3e0f7477" />
 
 ## Command Line Usage
 
@@ -48,8 +49,6 @@ python main.py photo.jpg
 ```
 
 To see more information or get a full JSON output, append the verbose or json flags to your command.
-
-<img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/45fb3538-6ee8-4e6a-a025-9acd3e0f7477" />
 
 
 ## Extending
