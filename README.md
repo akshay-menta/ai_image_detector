@@ -44,7 +44,8 @@ The final AI probability score ranges from 0.00 to 1.00:
 ```bash
 pip install -r requirements.txt
 ```
-<img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/fdbcf25d-68f8-4b2b-bc63-cef00df5af42" />
+<img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/77eb2f6b-3409-4702-8570-90e17aef859e" />
+
 
 
 2. **Add your Winston AI Key**:
