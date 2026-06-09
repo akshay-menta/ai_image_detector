@@ -1,3 +1,5 @@
-Pillow
-python-dotenv
 streamlit
+Pillow
+exifread
+requests
+python-dotenv

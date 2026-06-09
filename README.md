@@ -1,57 +1,60 @@
-# AI Image Detector
+# AI Image Detector Pipeline
 
-Detects AI generated images using only EXIF and file metadata. This is completely local and no external APIs are required.
+A smart, cost-effective tool to detect AI-generated images. This system uses a 3-stage pipeline to save API costs by checking free local metadata first, and only sending confusing or tricky images to a highly accurate AI detection model.
 
-## How it works
+## How It Works: The 3-Stage Pipeline
 
-The detector inspects the embedded metadata of the image for signals that indicate AI generation.
+### Stage 1: Local Metadata Scan (Free)
+The script reads the hidden data inside the image file (like EXIF data, PNG chunks, and C2PA credentials) completely locally. 
+* Real camera photos usually have rich metadata (like Shutter Speed, ISO, Lens Make).
+* AI images often have specific software tags (like "Midjourney" or "Stable Diffusion") or no metadata at all.
+If Stage 1 finds a definite answer (either clearly real or clearly AI), the pipeline **stops here** to save money.
 
-* **Software and Creator EXIF tag**: AI tools like Midjourney, DALL E, Adobe Firefly, and Stable Diffusion often write their name directly into the Software EXIF field.
-* **PNG text chunks**: Stable Diffusion and ComfyUI embed full generation parameters like prompt, steps, sampler, and seed into PNG text chunks.
-* **XMP metadata**: Adobe Firefly and DALL E embed AI provenance claims in XMP namespaces.
-* **C2PA manifest**: DALL E and other modern tools embed cryptographic content credentials.
-* **Camera EXIF richness**: Real photographs from cameras contain abundant EXIF fields. Examples include make, model, lens, ISO, shutter speed, and GPS. AI generated images typically have none of these.
+### Stage 2: Winston AI Image Detection
+If the image is in the "gray zone" (no clear metadata found in Stage 1), the image is sent to **Winston AI**, a purpose-built, highly accurate image detection model. 
+* Winston AI visually analyzes the image for AI artifacts and returns a Human Score (0-100).
+* We blend this score with the Stage 1 score (75% Winston, 25% Metadata) to get the most accurate final result.
 
-Each signal is weighted and combined into a single Stage 1 AI Score ranging from 0.0 to 1.0.
+### Stage 3: Confidence Router
+Finally, the router looks at the final score and decides what should happen to the image:
+* 🟢 **Auto-Approve**: The image is clearly real.
+* 🟡 **Human Review**: The image is still tricky, send it to a human moderator.
+* 🔴 **Auto-Reject**: The image is clearly AI-generated.
 
-## Score bands
+## Score Bands
 
-* 0.00 to 0.30 is LIKELY_REAL
-* 0.30 to 0.60 is UNCERTAIN
-* 0.60 to 0.85 is PROBABLY_AI
-* 0.85 to 1.00 is LIKELY_AI
+The final AI probability score ranges from 0.00 to 1.00:
+* **0.00 to 0.30**: LIKELY_REAL
+* **0.30 to 0.60**: UNCERTAIN
+* **0.60 to 0.85**: PROBABLY_AI
+* **0.85 to 1.00**: LIKELY_AI
 
 ## Project Structure
 
-* `main.py` is the command line entry point.
-* `app.py` provides a Streamlit web interface for easy drag and drop testing.
-* `pipeline.py` orchestrates the extraction and scoring process.
-* `stage1_metadata.py` contains the core extraction logic for EXIF, XMP, and PNG chunks.
-* `logger.py` handles writing results to an audit log file.
-* `config.py` holds the thresholds for the score bands.
+* `poc_app.py`: The main Streamlit web application. Features a premium dark-themed UI and drag-and-drop testing.
+* `pipeline.py`: Coordinates the full 3-stage execution.
+* `stage1_metadata.py`: Core logic for reading EXIF, XMP, and PNG chunks locally.
+* `stage2_winston.py`: Handles secure uploading and API communication with Winston AI.
+* `stage3_router.py`: Handles final routing logic and builds the audit trail.
+* `logger.py`: Writes all detection results to an audit log file (`audit_log.jsonl`).
 
-## Run the Web App
+## How to Run
 
-Install the dependencies and start the Streamlit server.
-
+1. **Install dependencies**:
 ```bash
-pip install Pillow python_dotenv streamlit
-streamlit run app.py
+pip install -r requirements.txt
 ```
 <img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/fdbcf25d-68f8-4b2b-bc63-cef00df5af42" />
 
 
-## Command Line Usage
-
-You can also run the detector via the command line interface.
-
-```bash
-python main.py photo.jpg
+2. **Add your Winston AI Key**:
+Create a `.env` file in the main folder and add your API key from [Winston AI](https://gowinston.ai/):
 ```
+WINSTON_API_KEY=your_key_here
+```
+*(You can also paste the key directly into the sidebar of the web app.)*
 
-To see more information or get a full JSON output, append the verbose or json flags to your command.
-
-
-## Extending
-
-Every result includes a `next_stage_input` field. This is a prepackaged payload ready to pass to any external API. For example, you could pass it to a vision model or a cloud classifier as a future Stage 2. To wire in a future API, import your module, pass the payload to it, blend the scores, and rerun the verdict logic.
+3. **Start the Web App**:
+```bash
+streamlit run poc_app.py
+```
