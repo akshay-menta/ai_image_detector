@@ -44,6 +44,8 @@ The final AI probability score ranges from 0.00 to 1.00:
 ```bash
 pip install -r requirements.txt
 ```
+<img width="2946" height="1686" alt="image" src="https://github.com/user-attachments/assets/aa8aae32-8a32-43b3-a973-7370a8e69e8d" />
+
 <img width="3014" height="1640" alt="image" src="https://github.com/user-attachments/assets/77eb2f6b-3409-4702-8570-90e17aef859e" />
 
 
